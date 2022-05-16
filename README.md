@@ -1,3 +1,11 @@
+Use pycharm for easy 
+
+install all libaries using pycharm terminal to run code 
+
+Login and Registration is fully voice validation using pyttsx3
+
+pip install pyttsx3
+
 # Face-Recognition-in-Python-Project
 Libraries -> Tkinter, MySql, Python Programming Language, OpenCV.
 Fro login page,Registration
