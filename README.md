@@ -16,7 +16,7 @@ it simple for teachers to keep track of attendance records.
 Libraries -> Tkinter, MySql, Python Programming Language, OpenCV.
 
 
- # Create like this in Mysql Workbench
+ # Mysql (DBMS) Workbench
 
 
             # login page,Registration
