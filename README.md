@@ -7,7 +7,7 @@ faces, and it will automatically mark who is present.
 • The attendance data is then saved in an Excel sheet, making
 it simple for teachers to keep track of attendance records.
 
-• Login and Registration page is fully voice field validation and verification using the # Pyttsx3
+• Login and Registration page is fully voice field validation and verification using the Pyttsx3
 
 
 # Face-Recognition-in-Python-Project
