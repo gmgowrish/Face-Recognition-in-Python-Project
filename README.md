@@ -9,7 +9,7 @@ it simple for teachers to keep track of attendance records.
 
 • Login and Registration page is fully voice field validation and verification using the Pyttsx3
 
-# OpenCV  (Open Source Computer Vision) - Haar Cascade Classifier
+## OpenCV  (Open Source Computer Vision) - Haar Cascade Classifier Algoritham
 
 
 # Face-Recognition-in-Python-Project
