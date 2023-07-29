@@ -9,6 +9,8 @@ it simple for teachers to keep track of attendance records.
 
 • Login and Registration page is fully voice field validation and verification using the Pyttsx3
 
+# OpenCV  (Open Source Computer Vision) - Haar Cascade Classifier
+
 
 # Face-Recognition-in-Python-Project
 Libraries -> Tkinter, MySql, Python Programming Language, OpenCV.
