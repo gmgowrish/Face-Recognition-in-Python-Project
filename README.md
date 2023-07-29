@@ -1,10 +1,14 @@
-Use pycharm for easy 
+• Using a Face Recognition Attendance Management System
+in schools makes it easy for teachers to take attendance.
 
-install all libaries using pycharm terminal to run code 
+• They just need to use the system’s camera to scan students’
+faces, and it will automatically mark who is present.
 
-Login and Registration is fully voice validation
+• The attendance data is then saved in an Excel sheet, making
+it simple for teachers to keep track of attendance records.
 
-install the libaraies use pip if version changes means follow the document of the library
+• Login and Registration page is fully voice field validation and verification using the Pyttsx3
+
 
 # Face-Recognition-in-Python-Project
 Libraries -> Tkinter, MySql, Python Programming Language, OpenCV.
