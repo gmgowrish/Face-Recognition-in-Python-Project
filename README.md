@@ -12,7 +12,7 @@ it simple for teachers to keep track of attendance records.
 ## OpenCV  (Open Source Computer Vision) - Haar Cascade Classifier Algoritham
 
 
-# Face-Recognition-in-Python-Project
+# Advance Face Recognition Attendance Management System
 Libraries -> Tkinter, MySql, Python Programming Language, OpenCV.
 
 
