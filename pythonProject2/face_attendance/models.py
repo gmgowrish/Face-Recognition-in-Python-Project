@@ -40,5 +40,6 @@ class AttendanceRecord(Base):
     date: Mapped[date_type] = mapped_column(Date, index=True)
     marked_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
     distance: Mapped[float] = mapped_column(Float)
+    snapshot_path: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     student: Mapped["Student"] = relationship(back_populates="attendance_records")

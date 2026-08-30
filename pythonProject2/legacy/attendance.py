@@ -203,7 +203,6 @@ class attendance:
 
     # import csv
     def ImportCsv(self):
-        global mydata
         mydata.clear()
         fln = filedialog.askopenfilename(initialdir=os.getcwd(), title="Open CSV",
                                          filetypes=(("CSV File", "*csv"), ("All File", "*.*")), parent=self.root)

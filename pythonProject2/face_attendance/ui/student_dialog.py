@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QTableWidgetItem,
     QVBoxLayout,
 )
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from .. import attendance_service
 from ..db import get_session
@@ -53,10 +53,14 @@ class StudentDialog(QDialog):
         delete_button = QPushButton("Delete Selected")
         delete_button.clicked.connect(self.delete_selected)
 
+        back_button = QPushButton("Back")
+        back_button.clicked.connect(self.accept)
+
         button_row = QHBoxLayout()
         button_row.addWidget(add_button)
         button_row.addWidget(capture_button)
         button_row.addWidget(delete_button)
+        button_row.addWidget(back_button)
 
         layout = QVBoxLayout(self)
         layout.addLayout(form)
@@ -108,6 +112,10 @@ class StudentDialog(QDialog):
             session.rollback()
             QMessageBox.warning(self, "Duplicate roll number", f"A student with roll number '{roll_number}' already exists.")
             return
+        except SQLAlchemyError as exc:
+            session.rollback()
+            QMessageBox.critical(self, "Database error", f"Could not save the student:\n{exc}")
+            return
         finally:
             session.close()
 
@@ -146,4 +154,5 @@ class StudentDialog(QDialog):
             attendance_service.delete_student(session, student_id)
         finally:
             session.close()
+        self.engine.clear_samples(student_id)
         self.refresh()

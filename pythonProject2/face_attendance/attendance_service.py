@@ -2,9 +2,12 @@ import csv
 from datetime import date as date_type
 from pathlib import Path
 
+import cv2
+import numpy as np
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
+from . import config
 from .models import AttendanceRecord, Student
 
 
@@ -71,6 +74,22 @@ def mark_present(
     return record
 
 
+def save_snapshot(session: Session, record: AttendanceRecord, face_bgr: np.ndarray) -> Path:
+    """Save the frame a student was recognized in as their record's photo.
+
+    Kept small (matches the face sample size) since these accumulate one
+    per student per day.
+    """
+    config.SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    path = config.SNAPSHOT_DIR / f"{record.id}.jpg"
+    thumbnail = cv2.resize(face_bgr, config.FACE_SAMPLE_SIZE)
+    cv2.imwrite(str(path), thumbnail)
+    record.snapshot_path = str(path)
+    session.add(record)
+    session.commit()
+    return path
+
+
 def list_attendance(
     session: Session,
     *,
@@ -78,7 +97,11 @@ def list_attendance(
     date_to: date_type | None = None,
     student_id: int | None = None,
 ) -> list[AttendanceRecord]:
-    stmt = select(AttendanceRecord).order_by(AttendanceRecord.date.desc(), AttendanceRecord.marked_at.desc())
+    stmt = (
+        select(AttendanceRecord)
+        .options(selectinload(AttendanceRecord.student))
+        .order_by(AttendanceRecord.date.desc(), AttendanceRecord.marked_at.desc())
+    )
     if date_from is not None:
         stmt = stmt.where(AttendanceRecord.date >= date_from)
     if date_to is not None:
@@ -92,11 +115,12 @@ def export_csv(records: list[AttendanceRecord], path: Path) -> Path:
     path = Path(path)
     with path.open("w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["Date", "Time", "Roll Number", "Name", "Department", "Match Distance"])
+        writer.writerow(["Date", "Day", "Time", "Roll Number", "Name", "Department", "Match Distance"])
         for record in records:
             writer.writerow(
                 [
                     record.date.isoformat(),
+                    record.date.strftime("%A"),
                     record.marked_at.strftime("%H:%M:%S"),
                     record.student.roll_number,
                     record.student.name,
@@ -105,3 +129,9 @@ def export_csv(records: list[AttendanceRecord], path: Path) -> Path:
                 ]
             )
     return path
+
+
+def default_export_filename(date_from: date_type, date_to: date_type) -> str:
+    if date_from == date_to:
+        return f"attendance_{date_from.isoformat()}_{date_from.strftime('%A')}.csv"
+    return f"attendance_{date_from.isoformat()}_to_{date_to.isoformat()}.csv"

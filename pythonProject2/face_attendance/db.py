@@ -1,8 +1,22 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from . import config
-from .models import Base
+from .models import AttendanceRecord, Base
+
+
+def _add_missing_columns(engine) -> None:
+    """Add new columns to an existing SQLite file without a migration tool.
+
+    create_all() only creates tables that don't exist yet, so a column added
+    to a model after someone already has a database on disk (e.g.
+    snapshot_path) needs this instead.
+    """
+    inspector = inspect(engine)
+    existing = {col["name"] for col in inspector.get_columns(AttendanceRecord.__tablename__)}
+    if "snapshot_path" not in existing:
+        with engine.begin() as conn:
+            conn.execute(text(f"ALTER TABLE {AttendanceRecord.__tablename__} ADD COLUMN snapshot_path VARCHAR(255)"))
 
 
 def make_engine(db_path=None):
@@ -14,6 +28,7 @@ def make_engine(db_path=None):
         url = f"sqlite:///{path}"
     engine = create_engine(url, future=True)
     Base.metadata.create_all(engine)
+    _add_missing_columns(engine)
     return engine
 
 
