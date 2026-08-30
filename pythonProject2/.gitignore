@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Runtime data (face samples, trained model, attendance database)
+data/
+!data/.gitkeep
+
+.env

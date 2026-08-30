@@ -1,0 +1,36 @@
+[project]
+name = "face-attendance"
+version = "2.0.0"
+description = "Desktop face-recognition attendance system (PyQt6 + OpenCV + SQLite)"
+requires-python = ">=3.10"
+dependencies = [
+    "PyQt6>=6.7",
+    "opencv-contrib-python>=4.10",
+    "numpy>=1.26",
+    "SQLAlchemy>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+# DTZ (naive datetime) rules don't fit this project: attendance dates are
+# local wall-clock dates for a single-machine desktop app, not UTC timestamps.
+ignore = ["DTZ"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatchling.build.targets.wheel]
+packages = ["face_attendance"]
